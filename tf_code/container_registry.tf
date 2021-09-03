@@ -1,15 +1,43 @@
-# DataBase Values
-postgresql-admin-user    = "Samplechaman@ascentdjangopgdb"
-postgresql-admin-password = "SamplePass"
-postgresql-version        = "11"
-postgresql-sku-name       = "B_Gen5_1"
-postgresql-storage        = "5432"
+### Variables -----------------------------------------------------------------
 
-# Container registry
-registry-name = "test_registry"
-sku_tier = "Standard"
-sku_size = "S1"
+variable "registry-name" {
+  type        = string
+  description = "Registry Name"
+  default     = "test_registry"
+}
 
-# App Service 
-app_service_plan_name = "reportinwebitePlan"
-web_app_name = "reportingwebsite"
+variable "sku_tier" {
+  type        = string
+  description = "SKU Tier"
+  default     = "Standard"
+}
+
+variable "sku_size" {
+    type    = string
+    description = "SKU Size"
+    default     = "S1"
+}
+
+### Resource Group Creation ------------------
+
+resource "azurerm_resource_group" "container-rg" {
+  name     = "reportingweb-containerreg-rg"
+  location = "westus"
+}
+
+### Resources ------------------
+
+resource "azurerm_container_registry" "acr" {
+  name                     = var.registry-name
+  resource_group_name      = azurerm_resource_group.container-rg.name
+  location                 = azurerm_resource_group.container-rg.location
+  sku                      = var.sku_tier
+  admin_enabled            = true
+
+}
+
+### Outputs ------------------
+
+output "admin_password" {
+  value       = azurerm_container_registry.acr.name
+}
