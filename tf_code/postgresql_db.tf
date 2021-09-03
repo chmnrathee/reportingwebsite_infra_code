@@ -4,10 +4,12 @@
 variable "postgresql-admin-user" {
   type        = string
   description = "Login Username"
+  default     = "Samplechaman"
 }
 variable "postgresql-admin-password" {
   type        = string
   description = "Login Password"
+  default     = "SamplePass"
 }
 variable "postgresql-version" {
   type        = string
@@ -69,7 +71,7 @@ resource "azurerm_postgresql_database" "postgresql-db" {
 ### FireWall Configuration  --------------
 
 resource "azurerm_postgresql_firewall_rule" "postgresql-fw-rule" {
-  name                = "PostgreSQL Office Access"
+  name                = "PostgreSQL_Access"
   resource_group_name = azurerm_resource_group.postgresql-rg.name
   server_name         = azurerm_postgresql_server.postgresql-server.name
   start_ip_address    = "103.55.105.72"
